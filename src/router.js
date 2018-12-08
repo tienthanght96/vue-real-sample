@@ -11,8 +11,7 @@ export default new Router({
     {
       path: "/",
       component: Home,
-      children: [
-        {
+      children: [{
           path: "/",
           name: "home",
           exact: true,
@@ -39,14 +38,13 @@ export default new Router({
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () =>
-        import(/* webpackChunkName: "about" */ "./views/About.vue")
+        import( /* webpackChunkName: "about" */ "./views/About.vue")
     },
     {
       path: "/user",
       name: "user",
       component: () => import("./views/User.vue"),
-      children: [
-        {
+      children: [{
           path: "signin",
           component: () => import("./views/SignIn.vue"),
           name: "signin"
@@ -62,11 +60,6 @@ export default new Router({
           name: "user_editor"
         },
         {
-          path: "new-article",
-          component: () => import("./views/Editor.vue"),
-          name: "user-new-article"
-        },
-        {
           path: "settings",
           component: () => import("./views/Settings.vue"),
           name: "user-settings"
@@ -76,13 +69,13 @@ export default new Router({
           component: () => import("./views/Profile.vue"),
           children: [
             {
-              path: '/',
+              path: "/",
               name: "profile",
               exact: true,
               component: () => import("./components/ProfileArticles.vue"),
             },
             {
-              path: 'favorites',
+              path: "favorites",
               name: "profile-favorites",
               exact: true,
               component: () => import("./components/ProfileFavorite.vue"),
@@ -90,6 +83,16 @@ export default new Router({
           ]
         },
       ]
-    }
+    },
+    {
+      path: "/editor/article/:slug?",
+      component: () => import("./views/Editor.vue"),
+      name: "user-edit-article"
+    },
+    {
+      path: "/article/:slug",
+      component: () => import("./views/ArticleDetail.vue"),
+      name: "article-detail"
+    },
   ]
 });

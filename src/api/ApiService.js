@@ -49,7 +49,71 @@ export const ArticleApi = {
       }
       return { articles: [], articlesCount: 0 };
     } catch (error) {
-      return { articles: [], articlesCount: 0 };
+      throw { articles: [], articlesCount: 0 };
+    }
+  },
+  createNewArticle : async (params) => {
+    try {
+      const { data } = await ApiService.post('/articles', { article: params });
+      return data.article;
+    } catch (error) {
+      throw error.response.data;
+    }
+  },
+  updateArticle : async (slug, params) => {
+    try {
+      const { data } = await ApiService.put(`/articles/${slug}`, { article: params });
+      return data.article;
+    } catch (error) {
+      throw error.response.data;
+    }
+  },
+  getDetailArticle: async (slug) => {
+    try {
+      const { data } = await ApiService.get(`/articles/${slug}`);
+      return data.article;
+    } catch (error) {
+      throw error.response.data;
+    }
+  },
+  getCommentArticle: async (slug) => {
+    try {
+      const { data } = await ApiService.get(`/articles/${slug}/comments`);
+      return data.comments;
+    } catch (error) {
+      throw error.response.data;
+    }
+  },
+  postComment: async (slug, body) => {
+    try {
+      const { data } = await ApiService.post(`articles/${slug}/comments`, {
+        comment: {
+          body,
+        }
+      });
+      return data.comment;
+    } catch (error) {
+      throw error.response.data;
+    }
+  },
+  deleteComment: async (slug, comment_id) => {
+    try {
+      const { status } =
+        await ApiService.delete(`articles/${slug}/comments/${comment_id}`);
+      return status;
+    } catch (error) {
+      throw 404;
+    }
+  },
+  favoriteArticle: async (slug, type) => {
+    try {
+      const url = `/articles/${slug}/favorite`
+      const { data } = await ((type === 'unfavorite')
+        ? ApiService.delete(url)
+        : ApiService.post(url));
+      return data.article;
+    } catch (error) {
+      throw error.response.data;
     }
   }
 };
@@ -113,4 +177,15 @@ export const ProfileApi = {
       throw error.response.data.errors
     }
   },
+  followAuthor: async (username, type) => {
+    try {
+      const url = `/profiles/${username}/follow`
+      const { data } = await ((type === 'unfollow')
+        ? ApiService.delete(url)
+        : ApiService.post(url));
+      return data.profile;
+    } catch (error) {
+      throw error.response.data;
+    }
+  }
 }

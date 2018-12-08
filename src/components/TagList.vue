@@ -27,7 +27,7 @@
     }
   }
 </script>
-<style scoped>
+<style lang="scss">
   .example {
     text-align: center;
     margin-bottom: 20px;
@@ -37,10 +37,10 @@
     list-style: none;
     padding: 0;
     margin: 0;
-  }
-  li {
-    display: inline-block;
-    margin: 3px;
-    cursor: pointer;
+    li {
+      display: inline-block;
+      margin: 3px;
+      cursor: pointer;
+    }
   }
 </style>

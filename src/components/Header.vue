@@ -54,7 +54,7 @@
               class="nav-link"
               active-class="active"
               exact
-              :to="{ name: 'user-new-article' }"
+              :to="{ name: 'user-edit-article' }"
             >
               <a-icon type="edit" :style="{ marginRight: 10 }"/>
               New Article

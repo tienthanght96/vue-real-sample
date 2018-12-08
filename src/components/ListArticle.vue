@@ -38,6 +38,8 @@ export default {
   props: {
     type: { type: String, required: true, default: 'all' },
     tag: { type: String, required: false },
+    author: { type: String, required: false },
+    favorited: { type: String, required: false },
   },
   data() {
     return {
@@ -48,13 +50,19 @@ export default {
   computed: {
     ...mapGetters(["articlesCount", "isLoading", "articles"]),
     paramsArticle(){
-      const { type, pageSize } = this;
+      const { type, pageSize, author, favorited } = this;
       const options = {
         offset: (this.currentPage - 1) * pageSize,
         limit: pageSize
       };
-      if(type !== 'all' && type !== 'feed'){
+      if(type !== 'all' && type !== 'feed' && type !== 'author' && type !== 'favorited'){
         options.tag = type;
+      }
+      if(author){
+        options.author = author;
+      }
+      if(favorited){
+        options.favorited = favorited;
       }
       return {
         type,
@@ -68,6 +76,10 @@ export default {
       this.getListArticle();
     },
     type(){
+      this.resetListArticle();
+      this.getListArticle();
+    },
+    author(){
       this.resetListArticle();
       this.getListArticle();
     },

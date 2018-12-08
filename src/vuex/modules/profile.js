@@ -1,6 +1,7 @@
-import { FETCH_PROFILE } from "../actionTypes";
+import { FETCH_PROFILE, TOGGLE_FOLLOW_AUTHOR, UPDATE_USER_INFO } from "../actionTypes";
 import { ProfileApi } from "../../api/ApiService";
-import { SET_PROFILE, SET_ERROR_PROFILE } from "../mutations";
+import { SET_PROFILE, SET_ERROR_PROFILE, UPDATE_ARTICLE_INFO } from "../mutations";
+import { getErrors } from "../../utils";
 
 const state = {
   profile: {},
@@ -20,6 +21,23 @@ const actions = {
     } catch (error) {
       const formatedError = getErrors(error)
       commit(SET_ERROR_PROFILE, formatedError);
+    }
+  },
+  async [TOGGLE_FOLLOW_AUTHOR]({ commit, rootState }, {username, type, callback}) {
+    try {
+      const profile = await ProfileApi.followAuthor(username, type);
+      const article = {
+        ...rootState.article.article,
+        author: {
+          ...profile
+        }
+      };
+      commit(UPDATE_ARTICLE_INFO, article);
+      callback(profile);
+    } catch (error) {
+      console.log('TOGGLE_FOLLOW_AUTHOR error', error);
+      const formatedErrors = getErrors(error);
+      callback(formatedErrors);
     }
   }
 };
